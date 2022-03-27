@@ -50,8 +50,7 @@ thanksgiving_meals%>%
 ```{r}
 unique(c(thanksgiving_meals$main_dish,thanksgiving_meals$main_dish_other))%>%
 kable(col.names = 'Main Dish')
-mainPrep <- unique(c(thanksgiving_meals$main_prep, thanksgiving_meals$main_prep_other))
-mainPrep%>%
+unique(c(thanksgiving_meals$main_prep, thanksgiving_meals$main_prep_other))%>%
 kable(col.names = 'Main Prep')
 ```
 
@@ -65,7 +64,6 @@ thanksgiving_meals %>%
   coord_flip() +
   theme_bw()
 ```
-5
 
 ```{r}
 thanksgiving_meals %>% 
@@ -77,4 +75,27 @@ thanksgiving_meals %>%
   filter(gravy == 'Yes') %>%
    count()
 ```
-
+```{r}
+thanksgiving_meals %>%
+  count(family_income,celebrate,sort=TRUE) %>%
+  filter(celebrate == 'Yes') %>%
+  group_by(family_income) %>%
+  ggplot(aes(family_income,n,fill=celebrate)) +
+  geom_col() +
+  coord_flip() +
+  labs(x="Family Income Range", y="Number of people celebr") +
+  theme_minimal()
+```
+```{r}
+thanksgiving_meals %>%
+ count(family_income,celebrate,sort=TRUE) %>%
+  filter(celebrate == 'Yes') %>%
+  group_by(family_income) %>%
+  mutate(family_income = fct_reorder(family_income, celebrate)) %>%
+  ggplot(aes(family_income, celebrate, group = 1, colour = celebrate)) +
+  geom_line() +
+  geom_point() +
+  labs(x = "Name of manufacturer", y = "Average city miles per gallon",
+       colour = "Average City Miles", 
+       title = "Average city miles for different manufacturers with 'celebrate' class")
+```
