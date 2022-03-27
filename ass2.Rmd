@@ -1,0 +1,80 @@
+---
+title: "Assement 2"
+author: Jing Yong Tan
+output: html_document
+date: '2022-03-20'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Name : *Tan Jing Yong* 
+## Student ID **4663992**
+
+----------------------
+
+# Assignment 2
+
+----------------------
+
+```{r}
+	library(tidyverse)
+	library(skimr)
+	library(knitr)
+	library(dplyr)
+	library(ggplot2)
+```
+
+```{r}
+	thanksgiving_meals <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-11-20/thanksgiving_meals.csv")
+```
+
+```{r}
+thanksgiving_meals %>% 
+  head(10)%>%
+  kable()
+```
+```{r}
+thanksgiving_meals %>% skim()
+```
+
+```{r}
+thanksgiving_meals %>%
+  mutate(family_income=fct_reorder(family_income, parse_number(family_income)))
+```
+```{r}
+thanksgiving_meals%>%
+  filter(celebrate!='No')%>%
+  count(celebrate)
+```
+```{r}
+unique(c(thanksgiving_meals$main_dish,thanksgiving_meals$main_dish_other))%>%
+kable(col.names = 'Main Dish')
+mainPrep <- unique(c(thanksgiving_meals$main_prep, thanksgiving_meals$main_prep_other))
+mainPrep%>%
+kable(col.names = 'Main Prep')
+```
+
+
+```{r}
+thanksgiving_meals %>%
+  filter(celebrate!='No')%>%
+  count(main_dish, main_prep) %>%
+  ggplot(aes(n,main_dish,fill=factor(main_prep))) +  
+  geom_col(position='stack',alpha=1) +
+  coord_flip() +
+  theme_bw()
+```
+5
+
+```{r}
+thanksgiving_meals %>% 
+  filter(cranberry!='None') %>%
+   count() 
+```
+```{r}
+thanksgiving_meals %>% 
+  filter(gravy == 'Yes') %>%
+   count()
+```
+
